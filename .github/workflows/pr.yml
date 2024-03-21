@@ -25,7 +25,7 @@ jobs:
       
       - name: Clone Documentation Repositories
         run: |
-          git clone https://github.com/M3GH4NN/dumm-repo.git docs/dummy-repo
+          git clone https://github.com/M3GH4NN/dummy-repo.git docs/dummy-repo
           # Add more clone commands for each repository as needed
 
       - name: Copy Documentation
