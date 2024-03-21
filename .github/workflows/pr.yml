@@ -18,10 +18,10 @@ jobs:
         with:
           python-version: '3.8'  # Choose the appropriate Python version
 
-      - name: Install Dependencies
-        run: |
-          pip install -r requirements.txt  # Install Sphinx and other dependencies
-          # Replace requirements.txt with the file containing your dependencies
+    #   - name: Install Dependencies
+    #     run: |
+    #       pip install -r requirements.txt  # Install Sphinx and other dependencies
+    #       # Replace requirements.txt with the file containing your dependencies
       
       - name: Clone Documentation Repositories
         run: |
