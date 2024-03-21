@@ -1,23 +1,50 @@
-name: Pull Request or Push
+name: Build and Publish Documentation
 
 on:
   push:
     branches:
-      - 'main'  # Run on pushes to main
-    tags-ignore:
-      - '*'   # Ignore pushes to tags
-  pull_request:
+      - main  # Adjust this according to your default branch
 
 jobs:
-  call_central_workflow:
-    name: CI
-    uses: salt-extensions/central-artifacts/.github/workflows/ci.yml@main
-    with:
-      setup-vault: true
-    permissions:
-      contents: write
-      pull-requests: read
   build:
     runs-on: ubuntu-latest
+
     steps:
-        
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Choose the appropriate Python version
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt  # Install Sphinx and other dependencies
+          # Replace requirements.txt with the file containing your dependencies
+      
+      - name: Clone Documentation Repositories
+        run: |
+          git clone https://github.com/M3GH4NN/dumm-repo.git docs/dummy-repo
+          # Add more clone commands for each repository as needed
+
+      - name: Copy Documentation
+        run: |
+          mkdir -p aggregated_docs
+          cp -r docs/dummy-repo/* aggregated_docs
+          # Add more copy commands for each repository as needed
+
+      - name: Commit Changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add .
+          git commit -m "Update aggregated documentation"
+          git push origin main
+
+      - name: Build Documentation
+        run: |
+          cd aggregated_docs
+          sphinx-build -b html . _build
+        env:
+          PYTHONPATH: $GITHUB_WORKSPACE/aggregated_docs
